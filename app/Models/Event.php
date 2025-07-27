@@ -14,7 +14,11 @@ class Event extends Model
      *
      * @var string
      */
+<<<<<<< HEAD
     protected $table = 'events';
+=======
+    protected $table = 'evenements';
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
 
     /**
      * Les attributs qui sont mass assignable.
@@ -23,10 +27,17 @@ class Event extends Model
      */
     protected $fillable = [
         'title',
+<<<<<<< HEAD
         'description',
         'date',
         'status',
         'event_type',
+=======
+        'date',
+        'event_type',
+        'status',
+        'description',
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
         'study_levels'
     ];
 
@@ -36,10 +47,15 @@ class Event extends Model
      * @var array<string, string>
      */
     protected $casts = [
+<<<<<<< HEAD
         'date' => 'datetime:Y-m-d',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
         'study_levels' => 'array'
+=======
+        'date' => 'date',
+        'study_levels' => 'json'
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
     ];
 
     /**

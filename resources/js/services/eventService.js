@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const API_BASE_URL = 'http://localhost:8000/api/v1';
+=======
+const API_BASE_URL = '/api/events/public';
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
 
 const getCsrfToken = () => {
     return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -55,7 +59,11 @@ const eventService = {
     getAll: async () => {
         try {
             console.log('Récupération des événements...');
+<<<<<<< HEAD
             const response = await fetch(`${API_BASE_URL}/evenements`, {
+=======
+            const response = await fetch(`${API_BASE_URL}`, {
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
                 method: 'GET',
                 headers: defaultHeaders,
                 credentials: 'include'
@@ -84,7 +92,11 @@ const eventService = {
 
             console.log('Données formatées envoyées au serveur:', formattedData);
             
+<<<<<<< HEAD
             const response = await fetch(`${API_BASE_URL}/evenements`, {
+=======
+            const response = await fetch(`${API_BASE_URL}`, {
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
                 method: 'POST',
                 headers: defaultHeaders,
                 credentials: 'include',
@@ -101,7 +113,11 @@ const eventService = {
     update: async (id, eventData) => {
         try {
             console.log('Tentative de mise à jour avec les données:', eventData);
+<<<<<<< HEAD
             const response = await fetch(`${API_BASE_URL}/evenements/${id}`, {
+=======
+            const response = await fetch(`${API_BASE_URL}/${id}`, {
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
                 method: 'PUT',
                 headers: defaultHeaders,
                 credentials: 'include',
@@ -119,7 +135,11 @@ const eventService = {
 
     delete: async (id) => {
         try {
+<<<<<<< HEAD
             const response = await fetch(`${API_BASE_URL}/evenements/${id}`, {
+=======
+            const response = await fetch(`${API_BASE_URL}/${id}`, {
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
                 method: 'DELETE',
                 headers: defaultHeaders,
                 credentials: 'include'

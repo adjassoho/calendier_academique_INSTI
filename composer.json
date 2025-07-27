@@ -8,7 +8,12 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.31",
+<<<<<<< HEAD
         "laravel/tinker": "^2.9"
+=======
+        "laravel/tinker": "^2.9",
+        "tecnickcom/tcpdf": "^6.8"
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

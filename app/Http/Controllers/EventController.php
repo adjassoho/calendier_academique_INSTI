@@ -10,7 +10,37 @@ class EventController extends Controller
 {
     public function index()
     {
+<<<<<<< HEAD
         return Event::orderBy('date', 'desc')->get();
+=======
+        $events = Event::orderBy('date', 'desc')->get();
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $events->map(function ($event) {
+                // Convertir les statuts de la base de données en statuts attendus par le frontend
+                $statusMapping = [
+                    'draft' => 'draft',
+                    'completed' => 'completed',
+                    'cancelled' => 'cancelled',
+                    'upcoming' => 'upcoming',
+                    // Ajoutez d'autres mappings si nécessaire
+                ];
+
+                return [
+                    'id' => $event->id,
+                    'title' => $event->title,
+                    'description' => $event->description,
+                    'date' => $event->date->format('Y-m-d'),
+                    'event_type' => $event->event_type,
+                    'status' => $statusMapping[$event->status] ?? $event->status,
+                    'study_levels' => $event->study_levels,
+                    'created_at' => $event->created_at,
+                    'updated_at' => $event->updated_at
+                ];
+            })
+        ]);
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
     }
 
     public function store(Request $request)
@@ -52,4 +82,37 @@ class EventController extends Controller
         $event->delete();
         return response()->json(null, 204);
     }
+<<<<<<< HEAD
+=======
+
+    public function getPublicEvents()
+    {
+        try {
+            $events = Event::orderBy('date', 'desc')->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => $events->map(function ($event) {
+                    return [
+                        'id' => $event->id,
+                        'title' => $event->title,
+                        'description' => $event->description,
+                        'date' => $event->date,
+                        'event_type' => $event->event_type,
+                        'status' => $event->status,
+                        'study_levels' => $event->study_levels,
+                        'created_at' => $event->created_at,
+                        'updated_at' => $event->updated_at
+                    ];
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur lors de la récupération des événements',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
 }

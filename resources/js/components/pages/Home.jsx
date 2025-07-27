@@ -21,6 +21,14 @@ import {
     CircularProgress,
     ToggleButtonGroup,
     ToggleButton,
+<<<<<<< HEAD
+=======
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    TextField,
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
 } from '@mui/material';
 import { 
     CalendarMonth, 
@@ -35,17 +43,30 @@ import {
 } from '@mui/icons-material';
 
 const getStatusColor = (status) => {
+<<<<<<< HEAD
     switch (status) {
         case 'upcoming':
             return { bg: '#e3f2fd', color: '#1976d2', label: 'À venir' };
+=======
+    switch (status?.toLowerCase()) {
+        case 'draft':
+            return { bg: '#f5f5f5', color: '#757575', label: 'Brouillon' };
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
         case 'completed':
             return { bg: '#e8f5e9', color: '#2e7d32', label: 'Terminé' };
         case 'cancelled':
             return { bg: '#ffebee', color: '#c62828', label: 'Annulé' };
+<<<<<<< HEAD
         case 'in_progress':
             return { bg: '#fff3e0', color: '#e65100', label: 'En cours' };
         default:
             return { bg: '#f5f5f5', color: '#757575', label: 'Non défini' };
+=======
+        case 'upcoming':
+            return { bg: '#e3f2fd', color: '#1976d2', label: 'À venir' };
+        default:
+            return { bg: '#f5f5f5', color: '#757575', label: status || 'Non défini' };
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
     }
 };
 
@@ -89,12 +110,24 @@ const Home = () => {
         thisWeek: 0,
         total: 0
     });
+<<<<<<< HEAD
+=======
+    const [filters, setFilters] = useState({
+        date: '',
+        studyLevel: 'all',
+        eventType: 'all'
+    });
+    const [filteredEvents, setFilteredEvents] = useState([]);
+    const [uniqueStudyLevels, setUniqueStudyLevels] = useState([]);
+    const [uniqueEventTypes, setUniqueEventTypes] = useState([]);
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
 
     useEffect(() => {
         setMounted(true);
         fetchEvents();
     }, [period]);
 
+<<<<<<< HEAD
     const fetchEvents = async () => {
         try {
             setLoading(true);
@@ -116,6 +149,57 @@ const Home = () => {
             };
             
             setStats(stats);
+=======
+    useEffect(() => {
+        if (events.length > 0) {
+            // Extraire les niveaux d'études uniques
+            const studyLevels = new Set();
+            events.forEach(event => {
+                if (Array.isArray(event.study_levels)) {
+                    event.study_levels.forEach(level => studyLevels.add(level));
+                } else if (typeof event.study_levels === 'object') {
+                    Object.values(event.study_levels).forEach(level => studyLevels.add(level));
+                }
+            });
+            setUniqueStudyLevels(Array.from(studyLevels));
+
+            // Extraire les types d'événements uniques
+            const eventTypes = new Set(events.map(event => event.event_type));
+            setUniqueEventTypes(Array.from(eventTypes));
+
+            // Appliquer les filtres
+            filterEvents();
+        }
+    }, [events, filters]);
+
+    const fetchEvents = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('/api/events');
+            if (response.data.status === 'success') {
+                const events = response.data.data;
+                setEvents(events);
+                
+                // Calculer les statistiques
+                const now = new Date();
+                const weekEnd = new Date();
+                weekEnd.setDate(weekEnd.getDate() + 7);
+                
+                const stats = {
+                    upcoming: events.filter(e => e.status === 'upcoming').length,
+                    thisWeek: events.filter(e => {
+                        const eventDate = new Date(e.date);
+                        const today = new Date();
+                        const nextWeek = new Date();
+                        nextWeek.setDate(today.getDate() + 7);
+                        return eventDate >= today && eventDate <= nextWeek;
+                    }).length,
+                    total: events.length
+                };
+                
+                setStats(stats);
+            }
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
             setLoading(false);
         } catch (error) {
             console.error('Erreur lors de la récupération des événements:', error);
@@ -152,6 +236,47 @@ const Home = () => {
         }
     };
 
+<<<<<<< HEAD
+=======
+    const filterEvents = () => {
+        let filtered = [...events];
+
+        // Filtre par date
+        if (filters.date) {
+            const filterDate = new Date(filters.date);
+            filtered = filtered.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.toDateString() === filterDate.toDateString();
+            });
+        }
+
+        // Filtre par niveau d'études
+        if (filters.studyLevel !== 'all') {
+            filtered = filtered.filter(event => {
+                const eventLevels = Array.isArray(event.study_levels) 
+                    ? event.study_levels 
+                    : Object.values(event.study_levels || {});
+                return eventLevels.includes(filters.studyLevel);
+            });
+        }
+
+        // Filtre par type d'événement
+        if (filters.eventType !== 'all') {
+            filtered = filtered.filter(event => event.event_type === filters.eventType);
+        }
+
+        setFilteredEvents(filtered);
+    };
+
+    const handleFilterChange = (filterName, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [filterName]: value
+        }));
+        setPage(0);
+    };
+
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
     return (
         <Box sx={{ 
             minHeight: '100vh',
@@ -304,6 +429,7 @@ const Home = () => {
                     </Paper>
                 </Box>
 
+<<<<<<< HEAD
                 {/* Table des événements */}
                 <Paper 
                     elevation={0}
@@ -491,6 +617,121 @@ const Home = () => {
                         </>
                     )}
                 </Paper>
+=======
+                {/* Nouveaux filtres */}
+                <Box sx={{ mb: 3 }}>
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                        Filtres
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={4}>
+                            <TextField
+                                fullWidth
+                                type="date"
+                                label="Date"
+                                value={filters.date}
+                                onChange={(e) => handleFilterChange('date', e.target.value)}
+                                InputLabelProps={{ shrink: true }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <FormControl fullWidth>
+                                <InputLabel>Niveau d'études</InputLabel>
+                                <Select
+                                    value={filters.studyLevel}
+                                    label="Niveau d'études"
+                                    onChange={(e) => handleFilterChange('studyLevel', e.target.value)}
+                                >
+                                    <MenuItem value="all">Tous les niveaux</MenuItem>
+                                    {uniqueStudyLevels.map((level) => (
+                                        <MenuItem key={level} value={level}>
+                                            {level}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <FormControl fullWidth>
+                                <InputLabel>Type d'événement</InputLabel>
+                                <Select
+                                    value={filters.eventType}
+                                    label="Type d'événement"
+                                    onChange={(e) => handleFilterChange('eventType', e.target.value)}
+                                >
+                                    <MenuItem value="all">Tous les types</MenuItem>
+                                    {uniqueEventTypes.map((type) => (
+                                        <MenuItem key={type} value={type}>
+                                            {type}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </Box>
+
+                {/* Table des événements */}
+                <TableContainer component={Paper} sx={{ mt: 4 }}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Titre</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Niveaux d'études</TableCell>
+                                <TableCell>Statut</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {filteredEvents
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((event) => {
+                                    const statusInfo = getStatusColor(event.status);
+                                    return (
+                                        <TableRow key={event.id}>
+                                            <TableCell>{event.title}</TableCell>
+                                            <TableCell>{event.event_type}</TableCell>
+                                            <TableCell>
+                                                {new Date(event.date).toLocaleDateString('fr-FR')}
+                                            </TableCell>
+                                            <TableCell>{event.description}</TableCell>
+                                            <TableCell>
+                                                {event.study_levels ? (
+                                                    Array.isArray(event.study_levels) 
+                                                        ? event.study_levels.join(', ')
+                                                        : typeof event.study_levels === 'object'
+                                                            ? Object.values(event.study_levels).join(', ')
+                                                            : event.study_levels
+                                                ) : ''}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={statusInfo.label}
+                                                    sx={{
+                                                        backgroundColor: statusInfo.bg,
+                                                        color: statusInfo.color,
+                                                        fontWeight: 500
+                                                    }}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                    <TablePagination
+                        component="div"
+                        count={filteredEvents.length}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        labelRowsPerPage="Lignes par page"
+                    />
+                </TableContainer>
+>>>>>>> 4c5c8e56df12f646868f88773aff6d1548a2e97b
             </Container>
         </Box>
     );
